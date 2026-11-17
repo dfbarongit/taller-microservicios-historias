@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de historias de usuario</title>
+</head>
+<body>
+    <h1>Gestor de historias de usuario</h1>
+    
+    <!-- Mensaje de error si viene ?error=1 en la URL -->
+    <p id="mensajeError">
+        Error al guardar los datos del usuario!!!
+    </p>
+
+    <header>
+        <ul>
+            <li><a href="inicio.html">Sprints</a></li>
+            <li><a href="informes.html">Informes</a></li>
+        </ul>
+    </header>
+
+    <!-- Menú de navegación de Sprints -->
+    <nav>
+        <ul id="listaSprints">
+            <li>Cargando sprints...</li>
+        </ul>
+        <a href="sprint_form.html">Nuevo Sprint</a>
+    </nav>
+
+    <!-- Información y acciones del Sprint seleccionado -->
+    <div id="infoSprint">
+        <h2 id="tituloSprint">Cargando...</h2>
+        <a id="btnModificarSprint" href="#">Modificar sprint</a>
+        <button id="btnEliminarSprint" type="button">Eliminar sprint</button>
+    </div>
+
+    <hr>
+
+    <!-- Listado de Historias del Sprint seleccionado -->
+    <div>
+        <a id="btnCrearHistoria" href="#">Crear nueva historia</a>
+        <div id="dHistorias">
+            <p>Cargando historias...</p>
+        </div>
+    </div>
+
+    <script src="inicio.js"></script>
+</body>
+</html>

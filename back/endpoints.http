@@ -1,0 +1,24 @@
+### Prueba de endpoints
+
+### Uusarios ms
+
+###prueba inicio
+GET http://127.0.0.1:8000/inicio
+
+### Prueba saludo
+POST http://127.0.0.1:8000/saludo
+Content-Type: application/json
+
+{
+    "nombre": "Alejandro",
+    "edad": 27
+}
+
+###obtener sprints
+GET http://127.0.0.1:8000/sprints
+
+###obtener historias
+GET http://127.0.0.1:8000/historias
+
+###obtener historias del sprint con id 1
+GET http://127.0.0.1:8000/sprints/1/historias

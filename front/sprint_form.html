@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Sprint</title>
+</head>
+<body>
+    <h1 id="tituloFormulario">Crear un nuevo sprint</h1>
+    <p id="subtituloSinReg">
+        No hay registros, inicie creando un nuevo sprint...
+    </p>
+    <p id="mensajeError"></p>
+
+    <form id="formSprint">
+        <input type="hidden" id="sprintId" name="id">
+
+        <div>
+            <label for="nombre">Nombre del sprint</label>
+            <input type="text" id="nombre" name="nombre" required>
+        </div>
+
+        <div>
+            <label for="fecha_inicio">Fecha de inicio</label>
+            <input type="date" id="fecha_inicio" name="fecha_inicio" required>
+
+            <label for="fecha_fin">Fecha de cierre</label>
+            <input type="date" id="fecha_fin" name="fecha_fin" required>
+        </div>
+
+        <div>
+            <a href="inicio.html">Cancelar</a>
+            <button type="submit" id="btnGuardar">Crear nuevo sprint</button>
+        </div>
+    </form>
+
+    <script src="sprint_form.js"></script>
+</body>
+</html>
