@@ -4,35 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Sprint</title>
+    <link rel="stylesheet" href="css/index.css">
 </head>
-<body>
-    <h1 id="tituloFormulario">Crear un nuevo sprint</h1>
-    <p id="subtituloSinReg">
-        No hay registros, inicie creando un nuevo sprint...
-    </p>
-    <p id="mensajeError"></p>
+<body class="form-page">
+    <main class="form-card">
+        <h1 id="tituloFormulario">Crear un nuevo sprint</h1>
 
-    <form id="formSprint">
-        <input type="hidden" id="sprintId" name="id">
+        <p id="subtituloSinReg" class="empty-state" hidden>
+            No hay registros, inicie creando un nuevo sprint...
+        </p>
+        <p id="mensajeError" class="error-message" hidden></p>
 
-        <div>
-            <label for="nombre">Nombre del sprint</label>
-            <input type="text" id="nombre" name="nombre" required>
-        </div>
+        <form id="formSprint">
+            <input type="hidden" id="sprintId" name="id">
 
-        <div>
-            <label for="fecha_inicio">Fecha de inicio</label>
-            <input type="date" id="fecha_inicio" name="fecha_inicio" required>
+            <div class="form-group">
+                <label for="nombre">Nombre del sprint</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
 
-            <label for="fecha_fin">Fecha de cierre</label>
-            <input type="date" id="fecha_fin" name="fecha_fin" required>
-        </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fecha_inicio">Fecha de inicio</label>
+                    <input type="date" id="fecha_inicio" name="fecha_inicio" required>
+                </div>
 
-        <div>
-            <a href="inicio.html">Cancelar</a>
-            <button type="submit" id="btnGuardar">Crear nuevo sprint</button>
-        </div>
-    </form>
+                <div class="form-group">
+                    <label for="fecha_fin">Fecha de cierre</label>
+                    <input type="date" id="fecha_fin" name="fecha_fin" required>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a href="inicio.html">Cancelar</a>
+                <button type="submit" id="btnGuardar">Crear nuevo sprint</button>
+            </div>
+        </form>
+    </main>
 
     <script src="sprint_form.js"></script>
 </body>
