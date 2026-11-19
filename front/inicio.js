@@ -14,7 +14,17 @@ const params = new URLSearchParams(window.location.search);
 let idSprintActual = params.get("id");
 
 if (params.get("error")) {
-    mensajeError.style.display = "block";
+    mensajeError.hidden = false;
+}
+
+// Escapa texto antes de meterlo en innerHTML (equivalente a htmlspecialchars)
+function esc(valor) {
+    return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
 }
 
 // Iniciar carga al abrir la página
@@ -25,7 +35,7 @@ async function inicializarVista() {
         // 1. Obtener todos los sprints
         const resSprints = await fetch(`${API_URL}/sprints`);
         if (!resSprints.ok) throw new Error(`Error HTTP: ${resSprints.status}`);
-        
+
         const sprints = await resSprints.json();
 
         // Si no hay sprints registrados, redirigir como en tu PHP
@@ -39,17 +49,18 @@ async function inicializarVista() {
             idSprintActual = sprints[0].id;
         }
 
-        // 2. Buscar el sprint actual y construir el menú <nav>
+        // 2. Buscar el sprint actual y construir el menú lateral
         let sprintActual = null;
         listaSprints.innerHTML = "";
 
         sprints.forEach((spr, index) => {
-            if (String(spr.id) === String(idSprintActual)) {
+            const esActual = String(spr.id) === String(idSprintActual);
+            if (esActual) {
                 sprintActual = spr;
             }
 
             const li = document.createElement("li");
-            li.innerHTML = `<a href="inicio.html?id=${spr.id}">Sprint ${index + 1}: ${spr.nombre}</a>`;
+            li.innerHTML = `<a class="${esActual ? "active" : ""}" href="inicio.html?id=${encodeURIComponent(spr.id)}">Sprint ${index + 1}: ${esc(spr.nombre)}</a>`;
             listaSprints.appendChild(li);
         });
 
@@ -72,7 +83,7 @@ async function inicializarVista() {
 
     } catch (error) {
         console.error("Error al inicializar:", error);
-        dHistorias.innerHTML = `<p>Error de conexión con el servidor: ${error.message}</p>`;
+        dHistorias.innerHTML = `<p class="empty-state error-message">Error de conexión con el servidor: ${esc(error.message)}</p>`;
     }
 }
 
@@ -80,7 +91,7 @@ async function cargarHistoriasDelSprint(idSprint) {
     try {
         // Consulta directa al endpoint filtrado por sprint_id en el backend
         const resHistorias = await fetch(`${API_URL}/sprints/${idSprint}/historias`);
-        
+
         if (!resHistorias.ok) {
             const errorData = await resHistorias.json().catch(() => ({}));
             throw new Error(errorData.error || `Error HTTP: ${resHistorias.status}`);
@@ -89,52 +100,40 @@ async function cargarHistoriasDelSprint(idSprint) {
         const historiasDelSprint = await resHistorias.json();
 
         if (!Array.isArray(historiasDelSprint) || historiasDelSprint.length === 0) {
-            dHistorias.innerHTML = "<p>No hay historias registradas en este sprint.</p>";
+            dHistorias.innerHTML = `<p class="empty-state">No hay historias registradas en este sprint.</p>`;
             return;
         }
 
-        let tablaHTML = `
-            <table border="1" style="width: 100%; border-collapse: collapse; text-align: left; margin-top: 10px;">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Título</th>
-                        <th>Descripción</th>
-                        <th>Responsable</th>
-                        <th>Estado</th>
-                        <th>Puntos</th>
-                        <th>Fecha Creación</th>
-                        <th>Fecha Finalización</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
+        let tarjetasHTML = "";
 
         historiasDelSprint.forEach((historia) => {
-            tablaHTML += `
-                <tr>
-                    <td>${historia.id ?? ""}</td>
-                    <td>${historia.titulo ?? ""}</td>
-                    <td>${historia.descripcion ?? ""}</td>
-                    <td>${historia.responsable ?? ""}</td>
-                    <td>${historia.estado ?? ""}</td>
-                    <td>${historia.puntos ?? ""}</td>
-                    <td>${historia.fecha_creacion ?? ""}</td>
-                    <td>${historia.fecha_finalizacion ?? ""}</td>
-                    <td>
-                        <a href="historia_form.html?idSprint=${historia.sprint_id}&id=${historia.id}">Modificar</a>
-                    </td>
-                </tr>
+            const estado = historia.estado ?? "";
+            const estadoHTML = String(estado).toLowerCase().includes("impedimento")
+                ? `<span class="impedimento">${esc(estado)}</span>`
+                : esc(estado);
+
+            tarjetasHTML += `
+                <article class="story-card">
+                    <h3>${esc(historia.titulo)}</h3>
+                    <p>${esc(historia.descripcion)}</p>
+                    <div class="story-meta">
+                        <span class="story-info"><strong>ID:</strong> ${esc(historia.id)}</span>
+                        <span class="story-info"><strong>Responsable:</strong> ${esc(historia.responsable)}</span>
+                        <span class="story-info"><strong>Estado:</strong> ${estadoHTML}</span>
+                        <span class="story-info"><strong>Puntos:</strong> ${esc(historia.puntos)}</span>
+                        <span class="story-info"><strong>Creación:</strong> ${esc(historia.fecha_creacion)}</span>
+                        <span class="story-info"><strong>Finalización:</strong> ${esc(historia.fecha_finalizacion)}</span>
+                    </div>
+                    <a class="button" href="historia_form.html?idSprint=${encodeURIComponent(historia.sprint_id)}&id=${encodeURIComponent(historia.id)}">Modificar</a>
+                </article>
             `;
         });
 
-        tablaHTML += `</tbody></table>`;
-        dHistorias.innerHTML = tablaHTML;
+        dHistorias.innerHTML = tarjetasHTML;
 
     } catch (error) {
         console.error("Error al obtener las historias:", error);
-        dHistorias.innerHTML = `<p>Error al cargar historias: ${error.message}</p>`;
+        dHistorias.innerHTML = `<p class="empty-state error-message">Error al cargar historias: ${esc(error.message)}</p>`;
     }
 }
 
