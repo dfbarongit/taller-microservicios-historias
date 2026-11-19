@@ -96,6 +96,7 @@ async function cargarDatosHistoria(id) {
         inputFechaCreacion.value = historia.fecha_creacion ?? "";
         inputFechaFinalizacion.value = historia.fecha_finalizacion ?? "";
 
+
     } catch (error) {
         mostrarError(`Error al obtener los datos de la historia: ${error.message}`);
     }
@@ -106,6 +107,25 @@ formHistoria.addEventListener("submit", async (e) => {
     e.preventDefault();
     mensajeError.style.display = "none";
 
+    console.log(inputFechaFinalizacion.value + " > " + inputFechaCreacion.value);
+
+    const inicioVal = inputFechaCreacion.value;
+    const finVal = inputFechaFinalizacion.value;
+
+    if (!finVal) {
+        console.log("Fecha de finalización vacía (permitido)");
+    } else {
+        const fechaInicio = new Date(inicioVal);
+        const fechaFin = new Date(finVal);
+
+        if (isNaN(fechaInicio.getTime()) || isNaN(fechaFin.getTime()) || fechaFin <= fechaInicio) {
+            alert("La fecha de finalización debe ser posterior a la de creación");
+            return;
+        }
+    }
+
+
+
     const payload = {
         sprint_id: Number(inputSprintId.value),
         titulo: inputTitulo.value.trim(),
@@ -114,7 +134,7 @@ formHistoria.addEventListener("submit", async (e) => {
         estado: selectEstado.value,
         puntos: Number(selectPuntos.value),
         fecha_creacion: inputFechaCreacion.value,
-        fecha_finalizacion: inputFechaFinalizacion.value
+        fecha_finalizacion: (inputFechaFinalizacion.value) ? inputFechaFinalizacion.value : null
     };
 
     const esEdicion = Boolean(idHistoria);
@@ -145,7 +165,6 @@ formHistoria.addEventListener("submit", async (e) => {
             );
         }
 
-        // Volver al sprint correspondiente
         window.location.href = `inicio.html?id=${payload.sprint_id}`;
 
     } catch (error) {
