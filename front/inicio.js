@@ -132,6 +132,7 @@ async function cargarHistoriasDelSprint(idSprint) {
     });
 
     dHistorias.innerHTML = tarjetasHTML;
+<<<<<<< HEAD
 
     dHistorias.querySelectorAll(".story-card").forEach((tarjeta, index) => {
       const btnEliminar = document.createElement("button");
@@ -142,6 +143,8 @@ async function cargarHistoriasDelSprint(idSprint) {
         eliminarHistoria(historiasDelSprint[index].id);
       tarjeta.appendChild(btnEliminar);
     });
+=======
+>>>>>>> 45e5e3f (arreglo rapido)
   } catch (error) {
     console.error("Error al obtener las historias:", error);
     dHistorias.innerHTML = `<p class="empty-state error-message">Error al cargar historias: ${esc(error.message)}</p>`;
