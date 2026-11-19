@@ -14,17 +14,7 @@ const params = new URLSearchParams(window.location.search);
 let idSprintActual = params.get("id");
 
 if (params.get("error")) {
-    mensajeError.hidden = false;
-}
-
-// Escapa texto antes de meterlo en innerHTML (equivalente a htmlspecialchars)
-function esc(valor) {
-    return String(valor ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
+  mensajeError.style.display = "block";
 }
 
 // Iniciar carga al abrir la página
@@ -85,6 +75,21 @@ async function inicializarVista() {
         console.error("Error al inicializar:", error);
         dHistorias.innerHTML = `<p class="empty-state error-message">Error de conexión con el servidor: ${esc(error.message)}</p>`;
     }
+
+    // 3. Actualizar cabecera y botones del Sprint actual
+    tituloSprint.textContent = sprintActual.nombre;
+    btnModificarSprint.href = `sprint_form.html?id=${idSprintActual}`;
+    btnCrearHistoria.href = `historia_form.html?idSprint=${idSprintActual}`;
+
+    // Configurar botón eliminar (reemplaza a eliminar_sprint.php)
+    btnEliminarSprint.onclick = () => eliminarSprint(idSprintActual);
+
+    // 4. Cargar las historias de este sprint
+    await cargarHistoriasDelSprint(idSprintActual);
+  } catch (error) {
+    console.error("Error al inicializar:", error);
+    dHistorias.innerHTML = `<p>Error de conexión con el servidor: ${error.message}</p>`;
+  }
 }
 
 async function cargarHistoriasDelSprint(idSprint) {
@@ -138,19 +143,35 @@ async function cargarHistoriasDelSprint(idSprint) {
 }
 
 async function eliminarSprint(id) {
-    if (!confirm("¿Estás seguro de eliminar este sprint?")) return;
+  if (!confirm("¿Estás seguro de eliminar este sprint?")) return;
 
-    try {
-        // Ajusta la ruta si tu endpoint de eliminación usa DELETE /sprints/{id}
-        const res = await fetch(`${API_URL}/sprints/${id}`, {
-            method: "DELETE"
-        });
+  try {
+    // Ajusta la ruta si tu endpoint de eliminación usa DELETE /sprints/{id}
+    const res = await fetch(`${API_URL}/sprints/${id}`, {
+      method: "DELETE",
+    });
 
-        if (!res.ok) throw new Error("No se pudo eliminar el sprint");
+    if (!res.ok) throw new Error("No se pudo eliminar el sprint");
 
-        // Recargar la página sin el parámetro ?id= para que cargue el primer sprint disponible
-        window.location.href = "inicio.html";
-    } catch (error) {
-        alert(`Error: ${error.message}`);
-    }
+    // Recargar la página sin el parámetro ?id= para que cargue el primer sprint disponible
+    window.location.href = "inicio.html";
+  } catch (error) {
+    alert(`Error: ${error.message}`);
+  }
+}
+async function eliminarHistoria(id) {
+  if (!confirm("¿Estás seguro de eliminar esta historia?")) return;
+  try {
+    // Ajusta la ruta si tu endpoint de eliminación usa DELETE /sprints/{id}
+    const res = await fetch(`${API_URL}/historias/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!res.ok) throw new Error("No se pudo eliminar el sprint");
+
+    // Recargar la página sin el parámetro ?id= para que cargue el primer sprint disponible
+    window.location.href = "inicio.html";
+  } catch (error) {
+    alert(`Error: ${error.message}`);
+  }
 }
