@@ -37,35 +37,33 @@ async function inicializarFormulario() {
 
         await cargarDatosHistoria(idHistoria);
     } else if (!idSprintActual) {
-        mostrarError("Falta el parámetro idSprint en la URL para asociar la historia.");
+        mostrarError("Error, no se especificó un sprint válido");
         btnGuardar.disabled = true;
     }
 }
 
 async function cargarDatosHistoria(id) {
     try {
-        const res = await fetch(`${API_URL}/historias/${id}`);
+        const res = await fetch(`${API_URL}/historias/${id}`)
         if (!res.ok) {
             throw new Error(`No se pudo cargar la historia (HTTP ${res.status})`);
         }
 
         const historia = await res.json();
 
-        // Actualizar sprint_id con el que viene de la base de datos
+        // Actualizar campos
         idSprintActual = historia.sprint_id ?? idSprintActual;
         inputSprintId.value = idSprintActual;
         btnCancelar.href = `inicio.html?id=${idSprintActual}`;
 
-        // Llenar todos los campos del formulario
         inputTitulo.value = historia.titulo ?? "";
         inputDescripcion.value = historia.descripcion ?? "";
         inputResponsable.value = historia.responsable ?? "";
         selectEstado.value = historia.estado ?? "";
         selectPuntos.value = String(historia.puntos ?? "");
         
-        // Limpiar posible formato datetime (YYYY-MM-DD HH:MM:SS) a YYYY-MM-DD
-        inputFechaCreacion.value = (historia.fecha_creacion ?? "").split(" ")[0];
-        inputFechaFinalizacion.value = (historia.fecha_finalizacion ?? "").split(" ")[0];
+        inputFechaCreacion.value = historia.fecha_creacion;
+        inputFechaFinalizacion.value = historia.fecha_finalizacion;
 
     } catch (error) {
         mostrarError(`Error al obtener los datos de la historia: ${error.message}`);

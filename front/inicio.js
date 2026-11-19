@@ -123,7 +123,7 @@ async function cargarHistoriasDelSprint(idSprint) {
                     <td>${historia.fecha_creacion ?? ""}</td>
                     <td>${historia.fecha_finalizacion ?? ""}</td>
                     <td>
-                        <a href="historia_form.html?idSprint=${historia.sprint_id}&id=${historia.id}">Modificar historia</a>
+                        <a href="historia_form.html?idSprint=${historia.sprint_id}&id=${historia.id}">Modificar</a>
                     </td>
                 </tr>
             `;

@@ -2,6 +2,9 @@
 
 ### Uusarios ms
 
+###prueba hola mundo
+GET http://127.0.0.1:8000/
+
 ###prueba inicio
 GET http://127.0.0.1:8000/inicio
 
