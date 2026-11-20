@@ -95,7 +95,10 @@ async function cargarDatosHistoria(id) {
 
         inputFechaCreacion.value = historia.fecha_creacion ?? "";
         inputFechaFinalizacion.value = historia.fecha_finalizacion ?? "";
+<<<<<<< HEAD
 
+=======
+>>>>>>> b87e39e (Franco[modificacion de boton eliminar y mostrar el nombre del sprint])
 
     } catch (error) {
         mostrarError(`Error al obtener los datos de la historia: ${error.message}`);
@@ -165,6 +168,10 @@ formHistoria.addEventListener("submit", async (e) => {
             );
         }
 
+<<<<<<< HEAD
+=======
+        // Volver al sprint correspondiente
+>>>>>>> b87e39e (Franco[modificacion de boton eliminar y mostrar el nombre del sprint])
         window.location.href = `inicio.html?id=${payload.sprint_id}`;
 
     } catch (error) {

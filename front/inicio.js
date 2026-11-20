@@ -133,6 +133,9 @@ async function cargarHistoriasDelSprint(idSprint) {
 
     dHistorias.innerHTML = tarjetasHTML;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b87e39e (Franco[modificacion de boton eliminar y mostrar el nombre del sprint])
 
     dHistorias.querySelectorAll(".story-card").forEach((tarjeta, index) => {
       const btnEliminar = document.createElement("button");
@@ -143,8 +146,11 @@ async function cargarHistoriasDelSprint(idSprint) {
         eliminarHistoria(historiasDelSprint[index].id);
       tarjeta.appendChild(btnEliminar);
     });
+<<<<<<< HEAD
 =======
 >>>>>>> 45e5e3f (arreglo rapido)
+=======
+>>>>>>> b87e39e (Franco[modificacion de boton eliminar y mostrar el nombre del sprint])
   } catch (error) {
     console.error("Error al obtener las historias:", error);
     dHistorias.innerHTML = `<p class="empty-state error-message">Error al cargar historias: ${esc(error.message)}</p>`;
