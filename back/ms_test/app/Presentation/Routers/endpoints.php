@@ -4,6 +4,7 @@
 // use Psr\Http\Message\ServerRequestInterface as Request;
 use App\Presentation\Repositories\SprintRepository;
 use App\Presentation\Repositories\HistoriaRepository;
+use App\Presentation\Repositories\InformeRepository;
 use Slim\App;
 
 return function (App $app) {
@@ -24,4 +25,9 @@ return function (App $app) {
     $app->post('/historias', [HistoriaRepository::class, 'create']);
     $app->put('/historias/{id}', [HistoriaRepository::class, 'update']);
     $app->delete('/historias/{id}', [HistoriaRepository::class, 'delete']);
+
+    $app->get('/informes/estados', [InformeRepository::class, 'getConteoPorEstado']);
+    $app->get('/informes/estados/{idSprint}', [InformeRepository::class, 'getConteoPorEstadoPorSprint']);
+    $app->get('/informes/responsables', [InformeRepository::class, 'getConteoPorResponsable']);
+    $app->get('/informes/responsables/{idSprint}', [InformeRepository::class, 'getConteoPorResponsablePorSprint']);
 };

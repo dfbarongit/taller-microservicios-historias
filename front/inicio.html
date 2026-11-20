@@ -4,44 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestor de historias de usuario</title>
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-    <h1>Gestor de historias de usuario</h1>
-    
-    <!-- Mensaje de error si viene ?error=1 en la URL -->
-    <p id="mensajeError">
-        Error al guardar los datos del usuario!!!
-    </p>
+    <div class="app-shell">
 
-    <header>
-        <ul>
-            <li><a href="inicio.html">Sprints</a></li>
-            <li><a href="informes.html">Informes</a></li>
-        </ul>
-    </header>
+        <!-- Barra superior -->
+        <header class="topbar">
+            <h1>Gestor de historias de usuario</h1>
+            <nav>
+                <ul>
+                    <li><a class="active" href="inicio.html">Sprints</a></li>
+                    <li><a href="informes.html">Informes</a></li>
+                </ul>
+            </nav>
+        </header>
 
-    <!-- Menú de navegación de Sprints -->
-    <nav>
-        <ul id="listaSprints">
-            <li>Cargando sprints...</li>
-        </ul>
-        <a href="sprint_form.html">Nuevo Sprint</a>
-    </nav>
+        <div class="app-layout">
 
-    <!-- Información y acciones del Sprint seleccionado -->
-    <div id="infoSprint">
-        <h2 id="tituloSprint">Cargando...</h2>
-        <a id="btnModificarSprint" href="#">Modificar sprint</a>
-        <button id="btnEliminarSprint" type="button">Eliminar sprint</button>
-    </div>
+            <!-- Menú lateral de Sprints -->
+            <aside class="sidebar">
+                <nav class="sprint-nav">
+                    <ul id="listaSprints">
+                        <li>Cargando sprints...</li>
+                    </ul>
+                    <a class="new-link" href="sprint_form.html">Nuevo Sprint</a>
+                </nav>
+            </aside>
 
-    <hr>
+            <main class="main-content">
 
-    <!-- Listado de Historias del Sprint seleccionado -->
-    <div>
-        <a id="btnCrearHistoria" href="#">Crear nueva historia</a>
-        <div id="dHistorias">
-            <p>Cargando historias...</p>
+                <!-- Mensaje de error si viene ?error=1 en la URL -->
+                <p id="mensajeError" class="error-message" hidden>
+                    Error al guardar los datos del usuario!!!
+                </p>
+
+                <!-- Información y acciones del Sprint seleccionado -->
+                <section class="sprint-header" id="infoSprint">
+                    <div class="sprint-header-title">
+                        <h2 id="tituloSprint">Cargando...</h2>
+                    </div>
+                    <div class="actions">
+                        <a id="btnModificarSprint" href="#">Modificar sprint</a>
+                        <button id="btnEliminarSprint" class="danger-link" type="button">Eliminar sprint</button>
+                    </div>
+                </section>
+
+                <!-- Listado de Historias del Sprint seleccionado -->
+                <a id="btnCrearHistoria" class="button button-primary create-story" href="#">Crear nueva historia</a>
+
+                <div id="dHistorias" class="story-grid">
+                    <p class="empty-state">Cargando historias...</p>
+                </div>
+
+            </main>
         </div>
     </div>
 

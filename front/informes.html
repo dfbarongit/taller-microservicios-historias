@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informes por sprint</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body class="app-shell">
+    <header>
+        <div class="topbar">
+            <h1>Gestor de historias de usuario</h1>
+            <nav aria-label="Navegacion principal">
+                <ul>
+                    <li><a href="inicio.html">Sprints</a></li>
+                    <li><a class="active" href="informes.html">Informes</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="report-layout">
+        <aside class="report-nav">
+            <nav aria-label="Filtros de informes">
+                <ul id="lista-sprints-nav">
+                    <li><a href="informes.html" data-sprint-id="-1">Global (Todos los sprints)</a></li>
+                    <!-- Aquí JS inyectará los enlaces de los sprints -->
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <p id="mensaje-error" class="error-message" style="display: none;"></p>
+
+            <section class="page-heading">
+                <h2 id="titulo-sprint">Cargando informes...</h2>
+            </section>
+
+            <div class="report-grid">
+                <section class="report-section">
+                    <h2>Historias por estado</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Estado</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-estados">
+                            <tr><td colspan="2">Cargando datos...</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="report-section">
+                    <h2>Historias por responsable</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Responsable</th>
+                                <th>Total</th>
+                                <th>Nuevas</th>
+                                <th>Activas</th>
+                                <th>Finalizadas</th>
+                                <th>Impedimentos</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-responsables">
+                            <tr><td colspan="6">Cargando datos...</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="informes.js"></script>
+</body>
+
+</html>

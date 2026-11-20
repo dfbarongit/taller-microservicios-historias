@@ -30,7 +30,7 @@ $app->post('/saludo', function (Request $request, Response $response, $args) {
     return $response;
 });
 
-$cors = require __DIR__ . '/../app/global/cors_config.php';
+$cors = require __DIR__ . '/../app/Middlewares/cors.php';
 $cors($app);
 
 

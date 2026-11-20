@@ -2,6 +2,9 @@
 
 ### Uusarios ms
 
+###prueba hola mundo
+GET http://127.0.0.1:8000/
+
 ###prueba inicio
 GET http://127.0.0.1:8000/inicio
 
@@ -22,3 +25,12 @@ GET http://127.0.0.1:8000/historias
 
 ###obtener historias del sprint con id 1
 GET http://127.0.0.1:8000/sprints/1/historias
+
+###obtener historias por estado
+GET http://127.0.0.1:8000/informes/estados
+###obtener historias por estado por sprint
+GET http://127.0.0.1:8000/informes/estados/1
+###obtener historias por responsable
+GET http://127.0.0.1:8000/informes/responsables
+###obtener historias por responsable por sprint
+GET http://127.0.0.1:8000/informes/responsables/1
