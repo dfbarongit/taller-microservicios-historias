@@ -1,82 +1,105 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Formulario de Historia de Usuario</title>
-    <link rel="stylesheet" href="css/index.css">
-</head>
-<body class="form-page">
+    <link rel="stylesheet" href="css/index.css" />
+  </head>
+  <body class="form-page">
     <main class="form-card">
-        <h1 id="tituloFormulario">Crear una nueva historia</h1>
+      <div class="form-group">
+        <label>Sprint seleccionado:</label>
+        <input
+          type="text"
+          id="nombreSprint"
+          readonly
+          placeholder="Cargando sprint..."
+        />
+      </div>
+      <h1 id="tituloFormulario">Crear una nueva historia</h1>
 
-        <p id="mensajeError" class="error-message" hidden></p>
+      <p id="mensajeError" class="error-message" hidden></p>
 
-        <form id="formHistoria">
-            <input type="hidden" id="historiaId" name="id">
-            <input type="hidden" id="sprintId" name="sprint_id">
+      <form id="formHistoria">
+        <input type="hidden" id="historiaId" name="id" />
+        <input type="hidden" id="sprintId" name="sprint_id" />
 
-            <div class="form-group">
-                <label for="titulo">Título de la historia</label>
-                <input type="text" id="titulo" name="titulo" required>
-            </div>
+        <div class="form-group">
+          <label for="titulo">Título de la historia</label>
+          <input type="text" id="titulo" name="titulo" required />
+        </div>
 
-            <div class="form-group">
-                <label for="descripcion">Descripción de la historia</label>
-                <textarea id="descripcion" name="descripcion" required></textarea>
-            </div>
+        <div class="form-group">
+          <label for="descripcion">Descripción de la historia</label>
+          <textarea id="descripcion" name="descripcion" required></textarea>
+        </div>
 
-            <div class="form-group">
-                <label for="responsable">Responsable</label>
-                <input type="text" id="responsable" name="responsable" required>
-            </div>
+        <div class="form-group">
+          <label for="responsable">Responsable</label>
+          <input type="text" id="responsable" name="responsable" required />
+        </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="estado">Estado</label>
-                    <select id="estado" name="estado" required>
-                        <option value="" disabled selected>-- Selecciona una opción --</option>
-                        <option value="nueva">Nueva</option>
-                        <option value="activa">Activa</option>
-                        <option value="finalizada">Finalizada</option>
-                        <option value="impedimento">Con impedimento</option>
-                    </select>
-                </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="estado">Estado</label>
+            <select id="estado" name="estado" required>
+              <option value="" disabled selected>
+                -- Selecciona una opción --
+              </option>
+              <option value="nueva">Nueva</option>
+              <option value="activa">Activa</option>
+              <option value="finalizada">Finalizada</option>
+              <option value="impedimento">Con impedimento</option>
+            </select>
+          </div>
 
-                <div class="form-group">
-                    <label for="puntos">Puntos</label>
-                    <select id="puntos" name="puntos" required>
-                        <option value="" disabled selected>-- Selecciona una opción --</option>
-                        <option value="1">1 pt - Tarea mínima</option>
-                        <option value="2">2 pts - Muy simple</option>
-                        <option value="3">3 pts - Ligeras dependencias</option>
-                        <option value="5">5 pts - Complejidad media</option>
-                        <option value="8">8 pts - Compleja</option>
-                        <option value="13">13 pts - Muy compleja</option>
-                        <option value="21">21 pts - Muy grande, debe dividirse</option>
-                    </select>
-                </div>
-            </div>
+          <div class="form-group">
+            <label for="puntos">Puntos</label>
+            <select id="puntos" name="puntos" required>
+              <option value="" disabled selected>
+                -- Selecciona una opción --
+              </option>
+              <option value="1">1 pt - Tarea mínima</option>
+              <option value="2">2 pts - Muy simple</option>
+              <option value="3">3 pts - Ligeras dependencias</option>
+              <option value="5">5 pts - Complejidad media</option>
+              <option value="8">8 pts - Compleja</option>
+              <option value="13">13 pts - Muy compleja</option>
+              <option value="21">21 pts - Muy grande, debe dividirse</option>
+            </select>
+          </div>
+        </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="fecha_creacion">Fecha de inicio</label>
-                    <input type="date" id="fecha_creacion" name="fecha_creacion" required>
-                </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fecha_creacion">Fecha de inicio</label>
+            <input
+              type="date"
+              id="fecha_creacion"
+              name="fecha_creacion"
+              required
+            />
+          </div>
 
-                <div class="form-group">
-                    <label for="fecha_finalizacion">Fecha de cierre</label>
-                    <input type="date" id="fecha_finalizacion" name="fecha_finalizacion" required>
-                </div>
-            </div>
+          <div class="form-group">
+            <label for="fecha_finalizacion">Fecha de cierre</label>
+            <input
+              type="date"
+              id="fecha_finalizacion"
+              name="fecha_finalizacion"
+              required
+            />
+          </div>
+        </div>
 
-            <div class="form-actions">
-                <a id="btnCancelar" href="inicio.html">Cancelar</a>
-                <button type="submit" id="btnGuardar">Crear nueva historia</button>
-            </div>
-        </form>
+        <div class="form-actions">
+          <a id="btnCancelar" href="inicio.html">Cancelar</a>
+          <button type="submit" id="btnGuardar">Crear nueva historia</button>
+        </div>
+      </form>
     </main>
 
     <script src="historia_form.js"></script>
-</body>
+  </body>
 </html>

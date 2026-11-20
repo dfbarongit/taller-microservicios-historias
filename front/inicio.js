@@ -126,12 +126,22 @@ async function cargarHistoriasDelSprint(idSprint) {
                         <span class="story-info"><strong>Creación:</strong> ${historia.fecha_creacion}</span>
                         <span class="story-info"><strong>Finalización:</strong> ${historia.fecha_finalizacion}</span>
                     </div>
-                    <a class="button" href="historia_form.html?idSprint=${encodeURIComponent(historia.sprint_id)}&id=${encodeURIComponent(historia.id)}">Modificar</a>
+                    <a class="button" href="historia_form.html?idSprint=${encodeURIComponent(historia.sprint_id)}&id=${encodeURIComponent(historia.id)}">Modificar Historia</a>
                 </article>
             `;
     });
 
     dHistorias.innerHTML = tarjetasHTML;
+
+    dHistorias.querySelectorAll(".story-card").forEach((tarjeta, index) => {
+      const btnEliminar = document.createElement("button");
+      btnEliminar.type = "button";
+      btnEliminar.className = "button danger-link";
+      btnEliminar.textContent = "Eliminar Historia";
+      btnEliminar.onclick = () =>
+        eliminarHistoria(historiasDelSprint[index].id);
+      tarjeta.appendChild(btnEliminar);
+    });
   } catch (error) {
     console.error("Error al obtener las historias:", error);
     dHistorias.innerHTML = `<p class="empty-state error-message">Error al cargar historias: ${esc(error.message)}</p>`;
@@ -171,3 +181,4 @@ async function eliminarHistoria(id) {
     alert(`Error: ${error.message}`);
   }
 }
+
