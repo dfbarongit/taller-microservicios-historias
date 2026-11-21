@@ -10,7 +10,6 @@ const sprintHeader = document.getElementById("sprintHeader");
 //obtener lista de sprints e inicializar
 getSprintsNav();
 
-let idSprintActual = new URLSearchParams(window.location.search).get("id");
 
 btnModificarSprint.href = `sprint_form.html?id=${idSprintActual}`;
 btnCrearHistoria.href = `historia_form.html?idSprint=${idSprintActual}`;
@@ -31,6 +30,12 @@ async function getSprintsNav() {
   try {
     const resSprints = await fetch("http://127.0.0.1:8000/sprints");
     const sprints = await resSprints.json();
+    if (!Array.isArray(sprints) || sprints.length === 0) {
+      //redireccionar a sprint_form.html para crear un nuevo sprint
+      window.location.href = "sprint_form.html?sinReg=1";
+      return;
+    }
+
     tituloSprint.textContent = "Informe del Sprint: " + sprints[0].nombre;
     if (!idSprintActual) {
       idSprintActual = sprints[0].id;
@@ -64,7 +69,7 @@ async function getSprintsNav() {
     });
   } catch (error) {
     console.error("Error al obtener los sprints:", error);
-    ulNav.innerHTML = `<li class="error-message">Error al cargar sprints: ${esc(error.message)}</li>`;
+      ulNav.innerHTML = `<li class="error-message">Error al cargar sprints: ${esc(error.message)}</li>`;
   }
   cargarHistoriasDelSprint(idSprintActual);
 }
