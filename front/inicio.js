@@ -1,7 +1,4 @@
-const API_URL = "http://127.0.0.1:8000";
-
-// Referencias al DOM
-const listaSprints = document.getElementById("listaSprints");
+const ulNav = document.getElementById("ulNav");
 const tituloSprint = document.getElementById("tituloSprint");
 const btnModificarSprint = document.getElementById("btnModificarSprint");
 const btnEliminarSprint = document.getElementById("btnEliminarSprint");
@@ -9,89 +6,57 @@ const btnCrearHistoria = document.getElementById("btnCrearHistoria");
 const dHistorias = document.getElementById("dHistorias");
 const mensajeError = document.getElementById("mensajeError");
 
-// Leer parámetros de la URL (equivalente a $_GET en PHP)
-const params = new URLSearchParams(window.location.search);
-let idSprintActual = params.get("id");
+//obtener lista de sprints e inicializar
+getSprintsNav();
 
-if (params.get("error")) {
+let idSprintActual = new URLSearchParams(window.location.search).get("id");
+
+btnModificarSprint.href = `sprint_form.html?id=${idSprintActual}`;
+btnCrearHistoria.href = `historia_form.html?idSprint=${idSprintActual}`;
+
+
+
+if (new URLSearchParams(window.location.search).get("error")) {
   mensajeError.style.display = "block";
 }
 
-// Iniciar carga al abrir la página
-document.addEventListener("DOMContentLoaded", inicializarVista);
-
-async function inicializarVista() {
-  try {
-    // 1. Obtener todos los sprints
-    const resSprints = await fetch(`${API_URL}/sprints`);
-    if (!resSprints.ok) throw new Error(`Error HTTP: ${resSprints.status}`);
-
+async function getSprintsNav() {
+  try{
+    const resSprints = await fetch("http://127.0.0.1:8000/sprints");
     const sprints = await resSprints.json();
-
-    // Si no hay sprints registrados, redirigir como en tu PHP
-    if (!Array.isArray(sprints) || sprints.length === 0) {
-      window.location.href = "sprint_form.html?sinReg=1";
-      return;
-    }
-
-    // Si no venía ?id= en la URL, tomar el primero de la lista
+    tituloSprint.textContent = "Informe del Sprint: " + sprints[0].nombre;
     if (!idSprintActual) {
-      idSprintActual = sprints[0].id;
-    }
-
-    // 2. Buscar el sprint actual y construir el menú lateral
-    let sprintActual = null;
-    listaSprints.innerHTML = "";
-
-    sprints.forEach((spr, index) => {
-      const esActual = String(spr.id) === String(idSprintActual);
-      if (esActual) {
-        sprintActual = spr;
-      }
-
-      const li = document.createElement("li");
-      li.innerHTML = `<a class="${esActual ? "active" : ""}" href="inicio.html?id=${encodeURIComponent(spr.id)}">Sprint ${index + 1}: ${(spr.nombre)}</a>`;
-      listaSprints.appendChild(li);
-    });
-
-    // Si el ID de la URL no existe en la base de datos, redirigir
-    if (!sprintActual) {
-      window.location.href = "sprint_form.html?sinReg=1";
-      return;
-    }
-
-    // 3. Actualizar cabecera y botones del Sprint actual
-    tituloSprint.textContent = sprintActual.nombre;
-    btnModificarSprint.href = `sprint_form.html?id=${idSprintActual}`;
-    btnCrearHistoria.href = `historia_form.html?idSprint=${idSprintActual}`;
-
-    // Configurar botón eliminar (reemplaza a eliminar_sprint.php)
-    btnEliminarSprint.onclick = () => eliminarSprint(idSprintActual);
-
-    // 4. Cargar las historias de este sprint
-    await cargarHistoriasDelSprint(idSprintActual);
-  } catch (error) {
-    console.error("Error al inicializar:", error);
-    dHistorias.innerHTML = `<p class="empty-state error-message">Error de conexión con el servidor: ${(error.message)}</p>`;
+    idSprintActual = sprints[0].id;
   }
+  ulNav.innerHTML = ""; // Limpiar la lista antes de agregar los elementos
+  sprints.forEach((sprint, index) => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = `inicio.html?id=${encodeURIComponent(sprint.id)}`;
+    a.dataset.sprintId = sprint.id;
+    a.textContent = `Sprint ${index + 1}: ${sprint.nombre}`;
+    li.appendChild(a);
+    if (String(sprint.id) === String(idSprintActual)) {
+      tituloSprint.textContent = `Informe del Sprint: ${sprint.nombre}`;
+      const linkActual = ulNav.querySelector(
+        `a[data-sprint-id="${sprint.id}"]`,
+      );
+      a.classList.add("active");
+    }
 
-  // 3. Actualizar cabecera y botones del Sprint actual
-  tituloSprint.textContent = sprintActual.nombre;
-  btnModificarSprint.href = `sprint_form.html?id=${idSprintActual}`;
-  btnCrearHistoria.href = `historia_form.html?idSprint=${idSprintActual}`;
-
-  // Configurar botón eliminar (reemplaza a eliminar_sprint.php)
-  btnEliminarSprint.onclick = () => eliminarSprint(idSprintActual);
-
-  // 4. Cargar las historias de este sprint
-  await cargarHistoriasDelSprint(idSprintActual);
+    ulNav.appendChild(li);
+  });
+  }catch (error) {
+    console.error("Error al obtener los sprints:", error);
+    ulNav.innerHTML = `<li class="error-message">Error al cargar sprints: ${esc(error.message)}</li>`;
+  }
+  cargarHistoriasDelSprint(idSprintActual);
 }
 
 async function cargarHistoriasDelSprint(idSprint) {
   try {
-    // Consulta directa al endpoint filtrado por sprint_id en el backend
     const resHistorias = await fetch(
-      `${API_URL}/sprints/${idSprint}/historias`,
+      `http://127.0.0.1:8000/sprints/${idSprint}/historias`,
     );
 
     if (!resHistorias.ok) {
@@ -109,17 +74,17 @@ async function cargarHistoriasDelSprint(idSprint) {
     let tarjetasHTML = "";
 
     historiasDelSprint.forEach((historia) => {
+      //resaltar el estado de impedimento si existe
       const estado = historia.estado ?? "";
       const estadoHTML = String(estado).toLowerCase().includes("impedimento")
-        ? `<span class="impedimento">${(estado)}</span>`
-        : (estado);
+        ? `<span class="impedimento">${estado}</span>`
+        : estado;
 
       tarjetasHTML += `
                 <article class="story-card">
                     <h3>${historia.titulo}</h3>
                     <p>${historia.descripcion}</p>
                     <div class="story-meta">
-                        <span class="story-info"><strong>ID:</strong> ${historia.id}</span>
                         <span class="story-info"><strong>Responsable:</strong> ${historia.responsable}</span>
                         <span class="story-info"><strong>Estado:</strong> ${estadoHTML}</span>
                         <span class="story-info"><strong>Puntos:</strong> ${historia.puntos}</span>
@@ -127,21 +92,11 @@ async function cargarHistoriasDelSprint(idSprint) {
                         <span class="story-info"><strong>Finalización:</strong> ${historia.fecha_finalizacion}</span>
                     </div>
                     <a class="button" href="historia_form.html?idSprint=${encodeURIComponent(historia.sprint_id)}&id=${encodeURIComponent(historia.id)}">Modificar Historia</a>
+                    <button class="button danger-link" onclick="eliminarHistoria(${historia.id})">Eliminar Historia</button>
                 </article>
             `;
     });
-
     dHistorias.innerHTML = tarjetasHTML;
-
-    dHistorias.querySelectorAll(".story-card").forEach((tarjeta, index) => {
-      const btnEliminar = document.createElement("button");
-      btnEliminar.type = "button";
-      btnEliminar.className = "button danger-link";
-      btnEliminar.textContent = "Eliminar Historia";
-      btnEliminar.onclick = () =>
-        eliminarHistoria(historiasDelSprint[index].id);
-      tarjeta.appendChild(btnEliminar);
-    });
   } catch (error) {
     console.error("Error al obtener las historias:", error);
     dHistorias.innerHTML = `<p class="empty-state error-message">Error al cargar historias: ${esc(error.message)}</p>`;
@@ -152,14 +107,12 @@ async function eliminarSprint(id) {
   if (!confirm("¿Estás seguro de eliminar este sprint?")) return;
 
   try {
-    // Ajusta la ruta si tu endpoint de eliminación usa DELETE /sprints/{id}
-    const res = await fetch(`${API_URL}/sprints/${id}`, {
+    const res = await fetch(`http://127.0.0.1:8000/sprints/${id}`, {
       method: "DELETE",
     });
 
     if (!res.ok) throw new Error("No se pudo eliminar el sprint");
 
-    // Recargar la página sin el parámetro ?id= para que cargue el primer sprint disponible
     window.location.href = "inicio.html";
   } catch (error) {
     alert(`Error: ${error.message}`);
@@ -168,17 +121,14 @@ async function eliminarSprint(id) {
 async function eliminarHistoria(id) {
   if (!confirm("¿Estás seguro de eliminar esta historia?")) return;
   try {
-    // Ajusta la ruta si tu endpoint de eliminación usa DELETE /sprints/{id}
-    const res = await fetch(`${API_URL}/historias/${id}`, {
+    const res = await fetch(`http://127.0.0.1:8000/historias/${id}`, {
       method: "DELETE",
     });
 
     if (!res.ok) throw new Error("No se pudo eliminar el sprint");
 
-    // Recargar la página sin el parámetro ?id= para que cargue el primer sprint disponible
     window.location.href = "inicio.html";
   } catch (error) {
     alert(`Error: ${error.message}`);
   }
 }
-
