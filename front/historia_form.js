@@ -106,23 +106,17 @@ formHistoria.addEventListener("submit", async (e) => {
     e.preventDefault();
     mensajeError.style.display = "none";
 
-    const inicioVal = inputFechaCreacion.value;
-    const finVal = inputFechaFinalizacion.value;
-
-    if (!finVal) {
+    if (!inputFechaFinalizacion.value) {
         console.log("Fecha de finalización vacía (permitido)");
     } else {
-        const fechaInicio = new Date(inicioVal);
-        const fechaFin = new Date(finVal);
+        const fechaInicio = new Date(inputFechaCreacion.value);
+        const fechaFin = new Date(inputFechaFinalizacion.value);
 
         if (isNaN(fechaInicio.getTime()) || isNaN(fechaFin.getTime()) || fechaFin <= fechaInicio) {
             alert("La fecha de finalización debe ser posterior a la de creación");
             return;
         }
     }
-
-
-
     const payload = {
         sprint_id: Number(inputSprintId.value),
         titulo: inputTitulo.value.trim(),

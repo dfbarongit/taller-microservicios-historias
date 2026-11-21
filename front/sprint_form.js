@@ -19,85 +19,99 @@ const sinReg = params.get("sinReg");
 document.addEventListener("DOMContentLoaded", inicializarFormulario);
 
 async function inicializarFormulario() {
-    if (sinReg) {
-        subtituloSinReg.style.display = "block";
-    }
+  if (sinReg) {
+    subtituloSinReg.style.display = "block";
+  }
 
-    // Si viene un ID en la URL, pasamos a modo Edición
-    if (idSprint) {
-        tituloFormulario.textContent = "Editar un sprint existente";
-        btnGuardar.textContent = "Guardar cambios";
-        inputId.value = idSprint;
+  // Si viene un ID en la URL, pasamos a modo Edición
+  if (idSprint) {
+    tituloFormulario.textContent = "Editar un sprint existente";
+    btnGuardar.textContent = "Guardar cambios";
+    inputId.value = idSprint;
 
-        await cargarDatosSprint(idSprint);
-    }
+    await cargarDatosSprint(idSprint);
+  }
 }
 
 async function cargarDatosSprint(id) {
-    try {
-        const res = await fetch(`${API_URL}/sprints/${id}`);
-        if (!res.ok) {
-            throw new Error(`No se pudo cargar el sprint (HTTP ${res.status})`);
-        }
-
-        const sprint = await res.json();
-
-        // Llenar los campos del formulario
-        inputNombre.value = sprint.nombre ?? "";
-        // Si MySQL devuelve fecha con hora (YYYY-MM-DD HH:MM:SS), tomamos solo YYYY-MM-DD
-        inputFechaInicio.value = (sprint.fecha_inicio ?? "").split(" ")[0];
-        inputFechaFin.value = (sprint.fecha_fin ?? "").split(" ")[0];
-
-    } catch (error) {
-        mostrarError(`Error al obtener los datos: ${error.message}`);
+  try {
+    const res = await fetch(`${API_URL}/sprints/${id}`);
+    if (!res.ok) {
+      throw new Error(`No se pudo cargar el sprint (HTTP ${res.status})`);
     }
+
+    const sprint = await res.json();
+
+    // Llenar los campos del formulario
+    inputNombre.value = sprint.nombre ?? "";
+    // Si MySQL devuelve fecha con hora (YYYY-MM-DD HH:MM:SS), tomamos solo YYYY-MM-DD
+    inputFechaInicio.value = (sprint.fecha_inicio ?? "").split(" ")[0];
+    inputFechaFin.value = (sprint.fecha_fin ?? "").split(" ")[0];
+  } catch (error) {
+    mostrarError(`Error al obtener los datos: ${error.message}`);
+  }
 }
 
 formSprint.addEventListener("submit", async (e) => {
-    e.preventDefault(); // Evitar recarga tradicional del formulario
-    mensajeError.style.display = "none";
+  e.preventDefault(); // Evitar recarga tradicional del formulario
+  mensajeError.style.display = "none";
+  const fechaInicio = new Date(inputFechaInicio.value);
+  const fechaFin = new Date(inputFechaFin.value);
+  if (
+    isNaN(fechaInicio.getTime()) ||
+    isNaN(fechaFin.getTime()) ||
+    fechaFin <= fechaInicio
+  ) {
+    alert("La fecha de finalización debe ser posterior a la de creación");
+    return;
+  }
 
-    const payload = {
-        nombre: inputNombre.value.trim(),
-        fecha_inicio: inputFechaInicio.value,
-        fecha_fin: inputFechaFin.value
-    };
+  const payload = {
+    nombre: inputNombre.value.trim(),
+    fecha_inicio: inputFechaInicio.value,
+    fecha_fin: inputFechaFin.value,
+  };
 
-    // Definir método y URL según si es creación o actualización
-    const esEdicion = Boolean(idSprint);
-    const url = esEdicion ? `${API_URL}/sprints/${idSprint}` : `${API_URL}/sprints`;
-    const metodo = esEdicion ? "PUT" : "POST";
+  // Definir método y URL según si es creación o actualización
+  const esEdicion = Boolean(idSprint);
+  const url = esEdicion
+    ? `${API_URL}/sprints/${idSprint}`
+    : `${API_URL}/sprints`;
+  const metodo = esEdicion ? "PUT" : "POST";
 
-    try {
-        btnGuardar.disabled = true;
-        btnGuardar.textContent = "Guardando...";
+  try {
+    btnGuardar.disabled = true;
+    btnGuardar.textContent = "Guardando...";
 
-        const res = await fetch(url, {
-            method: metodo,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-        });
+    const res = await fetch(url, {
+      method: metodo,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
-        const data = await res.json().catch(() => ({}));
+    const data = await res.json().catch(() => ({}));
 
-        if (!res.ok) {
-            throw new Error(data.error || `Error al guardar (HTTP ${res.status})`);
-        }
-
-        // Redirigir a inicio.html seleccionando el sprint recién creado o editado
-        const idDestino = esEdicion ? idSprint : (data.id ?? "");
-        window.location.href = idDestino ? `inicio.html?id=${idDestino}` : "inicio.html";
-
-    } catch (error) {
-        mostrarError(error.message);
-        btnGuardar.disabled = false;
-        btnGuardar.textContent = esEdicion ? "Guardar cambios" : "Crear nuevo sprint";
+    if (!res.ok) {
+      throw new Error(data.error || `Error al guardar (HTTP ${res.status})`);
     }
+
+    // Redirigir a inicio.html seleccionando el sprint recién creado o editado
+    const idDestino = esEdicion ? idSprint : (data.id ?? "");
+    window.location.href = idDestino
+      ? `inicio.html?id=${idDestino}`
+      : "inicio.html";
+  } catch (error) {
+    mostrarError(error.message);
+    btnGuardar.disabled = false;
+    btnGuardar.textContent = esEdicion
+      ? "Guardar cambios"
+      : "Crear nuevo sprint";
+  }
 });
 
 function mostrarError(texto) {
-    mensajeError.textContent = texto;
-    mensajeError.style.display = "block";
+  mensajeError.textContent = texto;
+  mensajeError.style.display = "block";
 }

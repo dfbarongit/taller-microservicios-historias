@@ -5,6 +5,7 @@ const btnEliminarSprint = document.getElementById("btnEliminarSprint");
 const btnCrearHistoria = document.getElementById("btnCrearHistoria");
 const dHistorias = document.getElementById("dHistorias");
 const mensajeError = document.getElementById("mensajeError");
+const sprintHeader = document.getElementById("sprintHeader");
 
 //obtener lista de sprints e inicializar
 getSprintsNav();
@@ -14,7 +15,13 @@ let idSprintActual = new URLSearchParams(window.location.search).get("id");
 btnModificarSprint.href = `sprint_form.html?id=${idSprintActual}`;
 btnCrearHistoria.href = `historia_form.html?idSprint=${idSprintActual}`;
 
-
+btnEliminarSprint.addEventListener("click", () => {
+  if (!idSprintActual) {
+    alert("No se puede eliminar un sprint no seleccionado");
+    return;
+  }
+  eliminarSprint(idSprintActual);
+});
 
 if (new URLSearchParams(window.location.search).get("error")) {
   mensajeError.style.display = "block";
@@ -38,6 +45,11 @@ async function getSprintsNav() {
     li.appendChild(a);
     if (String(sprint.id) === String(idSprintActual)) {
       tituloSprint.textContent = `Informe del Sprint: ${sprint.nombre}`;
+      sprintHeader.innerHTML += 
+              `<div>
+                  <span class="story-info">Fecha inicio: <strong>${sprint.fecha_inicio}</strong></span>
+                  <span class="story-info">Fecha fin: <strong>${sprint.fecha_fin}</strong></span>
+              </div>`;
       const linkActual = ulNav.querySelector(
         `a[data-sprint-id="${sprint.id}"]`,
       );
@@ -88,7 +100,7 @@ async function cargarHistoriasDelSprint(idSprint) {
                       <span class="story-info"><strong>Estado:</strong> ${estadoHTML}</span>
                       <span class="story-info"><strong>Puntos:</strong> ${historia.puntos}</span>
                       <span class="story-info"><strong>Creación:</strong> ${historia.fecha_creacion}</span>
-                      <span class="story-info"><strong>Finalización:</strong> ${historia.fecha_finalizacion}</span>
+                      <span class="story-info"><strong>Finalización:</strong> ${historia.fecha_finalizacion??"Sin fecha"}</span>
                       <span class="story-info"><strong>Responsable:</strong> ${historia.responsable}</span>
                     </div>
                     <a class="button" href="historia_form.html?idSprint=${encodeURIComponent(historia.sprint_id)}&id=${encodeURIComponent(historia.id)}">Modificar Historia</a>
