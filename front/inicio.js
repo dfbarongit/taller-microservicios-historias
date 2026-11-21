@@ -85,11 +85,11 @@ async function cargarHistoriasDelSprint(idSprint) {
                     <h3>${historia.titulo}</h3>
                     <p>${historia.descripcion}</p>
                     <div class="story-meta">
-                        <span class="story-info"><strong>Responsable:</strong> ${historia.responsable}</span>
-                        <span class="story-info"><strong>Estado:</strong> ${estadoHTML}</span>
-                        <span class="story-info"><strong>Puntos:</strong> ${historia.puntos}</span>
-                        <span class="story-info"><strong>Creación:</strong> ${historia.fecha_creacion}</span>
-                        <span class="story-info"><strong>Finalización:</strong> ${historia.fecha_finalizacion}</span>
+                      <span class="story-info"><strong>Estado:</strong> ${estadoHTML}</span>
+                      <span class="story-info"><strong>Puntos:</strong> ${historia.puntos}</span>
+                      <span class="story-info"><strong>Creación:</strong> ${historia.fecha_creacion}</span>
+                      <span class="story-info"><strong>Finalización:</strong> ${historia.fecha_finalizacion}</span>
+                      <span class="story-info"><strong>Responsable:</strong> ${historia.responsable}</span>
                     </div>
                     <a class="button" href="historia_form.html?idSprint=${encodeURIComponent(historia.sprint_id)}&id=${encodeURIComponent(historia.id)}">Modificar Historia</a>
                     <button class="button danger-link" onclick="eliminarHistoria(${historia.id})">Eliminar Historia</button>
