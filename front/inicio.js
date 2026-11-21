@@ -28,37 +28,41 @@ if (new URLSearchParams(window.location.search).get("error")) {
 }
 
 async function getSprintsNav() {
-  try{
+  try {
     const resSprints = await fetch("http://127.0.0.1:8000/sprints");
     const sprints = await resSprints.json();
     tituloSprint.textContent = "Informe del Sprint: " + sprints[0].nombre;
     if (!idSprintActual) {
-    idSprintActual = sprints[0].id;
-  }
-  ulNav.innerHTML = ""; // Limpiar la lista antes de agregar los elementos
-  sprints.forEach((sprint, index) => {
-    const li = document.createElement("li");
-    const a = document.createElement("a");
-    a.href = `inicio.html?id=${encodeURIComponent(sprint.id)}`;
-    a.dataset.sprintId = sprint.id;
-    a.textContent = `Sprint ${index + 1}: ${sprint.nombre}`;
-    li.appendChild(a);
-    if (String(sprint.id) === String(idSprintActual)) {
-      tituloSprint.textContent = `Informe del Sprint: ${sprint.nombre}`;
-      sprintHeader.innerHTML += 
-              `<div>
+      idSprintActual = sprints[0].id;
+    }
+    if (idSprintActual) {
+      btnModificarSprint.href = `sprint_form.html?id=${encodeURIComponent(idSprintActual)}`;
+      btnCrearHistoria.href = `historia_form.html?idSprint=${encodeURIComponent(idSprintActual)}`;
+    }
+
+    ulNav.innerHTML = ""; // Limpiar la lista antes de agregar los elementos
+    sprints.forEach((sprint, index) => {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = `inicio.html?id=${encodeURIComponent(sprint.id)}`;
+      a.dataset.sprintId = sprint.id;
+      a.textContent = `Sprint ${index + 1}: ${sprint.nombre}`;
+      li.appendChild(a);
+      if (String(sprint.id) === String(idSprintActual)) {
+        tituloSprint.textContent = `Informe del Sprint: ${sprint.nombre}`;
+        sprintHeader.innerHTML += `<div>
                   <span class="story-info">Fecha inicio: <strong>${sprint.fecha_inicio}</strong></span>
                   <span class="story-info">Fecha fin: <strong>${sprint.fecha_fin}</strong></span>
               </div>`;
-      const linkActual = ulNav.querySelector(
-        `a[data-sprint-id="${sprint.id}"]`,
-      );
-      a.classList.add("active");
-    }
+        const linkActual = ulNav.querySelector(
+          `a[data-sprint-id="${sprint.id}"]`,
+        );
+        a.classList.add("active");
+      }
 
-    ulNav.appendChild(li);
-  });
-  }catch (error) {
+      ulNav.appendChild(li);
+    });
+  } catch (error) {
     console.error("Error al obtener los sprints:", error);
     ulNav.innerHTML = `<li class="error-message">Error al cargar sprints: ${esc(error.message)}</li>`;
   }
@@ -100,7 +104,7 @@ async function cargarHistoriasDelSprint(idSprint) {
                       <span class="story-info"><strong>Estado:</strong> ${estadoHTML}</span>
                       <span class="story-info"><strong>Puntos:</strong> ${historia.puntos}</span>
                       <span class="story-info"><strong>Creación:</strong> ${historia.fecha_creacion}</span>
-                      <span class="story-info"><strong>Finalización:</strong> ${historia.fecha_finalizacion??"Sin fecha"}</span>
+                      <span class="story-info"><strong>Finalización:</strong> ${historia.fecha_finalizacion ?? "Sin fecha"}</span>
                       <span class="story-info"><strong>Responsable:</strong> ${historia.responsable}</span>
                     </div>
                     <a class="button" href="historia_form.html?idSprint=${encodeURIComponent(historia.sprint_id)}&id=${encodeURIComponent(historia.id)}">Modificar Historia</a>
@@ -109,7 +113,6 @@ async function cargarHistoriasDelSprint(idSprint) {
             `;
     });
     dHistorias.innerHTML = tarjetasHTML;
-
   } catch (error) {
     console.error("Error al obtener las historias:", error);
     dHistorias.innerHTML = `<p class="empty-state error-message">Error al cargar historias: ${esc(error.message)}</p>`;
@@ -138,7 +141,7 @@ async function eliminarHistoria(id) {
       method: "DELETE",
     });
 
-    if (!res.ok) throw new Error("No se pudo eliminar el sprint");
+    if (!res.ok) throw new Error("No se pudo eliminar la historia");
 
     window.location.href = "inicio.html";
   } catch (error) {
