@@ -95,10 +95,6 @@ async function cargarDatosHistoria(id) {
 
         inputFechaCreacion.value = historia.fecha_creacion ?? "";
         inputFechaFinalizacion.value = historia.fecha_finalizacion ?? "";
-<<<<<<< HEAD
-
-=======
->>>>>>> b87e39e (Franco[modificacion de boton eliminar y mostrar el nombre del sprint])
 
     } catch (error) {
         mostrarError(`Error al obtener los datos de la historia: ${error.message}`);
@@ -109,8 +105,6 @@ async function cargarDatosHistoria(id) {
 formHistoria.addEventListener("submit", async (e) => {
     e.preventDefault();
     mensajeError.style.display = "none";
-
-    console.log(inputFechaFinalizacion.value + " > " + inputFechaCreacion.value);
 
     const inicioVal = inputFechaCreacion.value;
     const finVal = inputFechaFinalizacion.value;
@@ -168,10 +162,7 @@ formHistoria.addEventListener("submit", async (e) => {
             );
         }
 
-<<<<<<< HEAD
-=======
         // Volver al sprint correspondiente
->>>>>>> b87e39e (Franco[modificacion de boton eliminar y mostrar el nombre del sprint])
         window.location.href = `inicio.html?id=${payload.sprint_id}`;
 
     } catch (error) {
