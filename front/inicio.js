@@ -9,7 +9,6 @@ const sprintHeader = document.getElementById("sprintHeader");
 
 //obtener lista de sprints e inicializar
 getSprintsNav();
-
 let idSprintActual = new URLSearchParams(window.location.search).get("id");
 
 btnModificarSprint.href = `sprint_form.html?id=${idSprintActual}`;
