@@ -71,13 +71,17 @@ async function getHistoriasPorResponsable() {
     tResponsables.innerHTML = "";
     historias.forEach((historia) => {
       const tr = document.createElement("tr");
+      let impedimentoResaltado = historia.impedimentos ?? "";
+      if (historia.impedimentos > 0) {
+        impedimentoResaltado = `<span class="impedimento">${historia.impedimentos}</span>`;
+      }
       tr.innerHTML = `
             <td>${historia.responsable}</td>
             <td>${historia.total}</td>
             <td>${historia.nuevas}</td>
             <td>${historia.activas}</td>
             <td>${historia.finalizadas}</td>
-            <td>${historia.impedimentos}</td>
+            <td>${impedimentoResaltado}</td>
         `;
       tResponsables.appendChild(tr);
     });

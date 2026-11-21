@@ -9,7 +9,7 @@
 <body>
     <div class="app-shell">
 
-        <!-- Barra superior -->
+        
         <header class="topbar">
             <h1>Gestor de historias de usuario</h1>
             <nav>
@@ -22,10 +22,10 @@
 
         <div class="app-layout">
 
-            <!-- Menú lateral de Sprints -->
+            
             <aside class="sidebar">
                 <nav class="sprint-nav">
-                    <ul id="listaSprints">
+                    <ul id="ulNav">
                         <li>Cargando sprints...</li>
                     </ul>
                     <a class="new-link" href="sprint_form.html">Nuevo Sprint</a>
@@ -34,12 +34,12 @@
 
             <main class="main-content">
 
-                <!-- Mensaje de error si viene ?error=1 en la URL -->
+                
                 <p id="mensajeError" class="error-message" hidden>
                     Error al guardar los datos del usuario!!!
                 </p>
 
-                <!-- Información y acciones del Sprint seleccionado -->
+                
                 <section class="sprint-header" id="infoSprint">
                     <div class="sprint-header-title">
                         <h2 id="tituloSprint">Cargando...</h2>
@@ -50,7 +50,7 @@
                     </div>
                 </section>
 
-                <!-- Listado de Historias del Sprint seleccionado -->
+                
                 <a id="btnCrearHistoria" class="button button-primary create-story" href="#">Crear nueva historia</a>
 
                 <div id="dHistorias" class="story-grid">
